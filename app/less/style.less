@@ -1,0 +1,140 @@
+body{
+	margin: 0;
+	padding: 0;
+}
+h1{
+	margin-top: 300px;
+}
+.ui-body-c{
+	background: #fff;
+	z-index: 1;
+}
+.ui-page {
+	-webkit-backface-visibility: hidden !important;
+}
+#nav-dropdown{
+	width: 100%;
+	border: 1px solid #000;
+	background: #ddd;
+	height: 310px;
+	position: fixed;
+	z-index: 2;
+	margin-top: -280px;
+	transition:all 0.5s ease-in-out;
+	-webkit-transition:all 0.5s ease-in-out;
+	-moz-transition:all 0.5s ease-in-out;
+	-o-transition:all 0.5s ease-in-out;
+	ul{
+		li{
+			list-style: none;
+			float: left;
+			border: 1px solid #000;
+			margin: 5px;
+			a{
+				display: block;
+				width: 100px;
+				height: 100px;
+			}
+		}
+	}
+	#nav-links-container{
+		float: left;
+		width: 100%;
+		ul{
+			li{
+				a{
+					&.active{
+						background: #555;
+					}
+				}
+			}
+		}
+	}
+	#main-story-links-container{
+		float: left;
+		width: 100%;
+		ul{
+			li{
+				&.active{
+					a{
+						background: #555;
+					}
+				}
+			}
+		}
+	}
+	#nav-dropdown-button-container{
+		width: 100%;
+		position:absolute;
+		bottom: 0;
+		#dropdown-button{
+			width: 200px;
+			margin: 0 auto;
+			background: #222;
+			color: #fff;
+			text-align: center;
+			padding: 5px;
+			height: 20px;
+		}
+	}
+	&.show{
+		margin-top: 0;
+		transition:all 0.5s ease-in-out;
+		-webkit-transition:all 0.5s ease-in-out;
+		-moz-transition:all 0.5s ease-in-out;
+		-o-transition:all 0.5s ease-in-out;
+	}
+}
+#isi-container{
+	position: fixed;
+	/*top:735px;*/
+	bottom: 0;
+	background: #ddd;
+	width: 100%;
+	height: 30px;
+	border: 1px solid #000;
+	height: 250px;
+	z-index: 2;
+	margin-bottom: -220px;
+	transition:all 0.5s ease-in-out;
+	-webkit-transition:all 0.5s ease-in-out;
+	-moz-transition:all 0.5s ease-in-out;
+	-o-transition:all 0.5s ease-in-out;
+
+	#isi-button-container{
+		width:100%;
+		#isi-button{
+			width: 200px;
+			margin: 0 auto;
+			background: #222;
+			color: #fff;
+			text-align: center;
+			padding: 5px;
+			height: 20px;
+		}
+	}
+	&.show{
+		margin-bottom: 0px;
+		transition:all 0.5s ease-in-out;
+		-webkit-transition:all 0.5s ease-in-out;
+		-moz-transition:all 0.5s ease-in-out;
+		-o-transition:all 0.5s ease-in-out;
+	}
+	#isi-copy{
+		width: 780px;
+		padding: 0 10px;
+	}
+}
+#timer-container{
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	border: 1px solid #000;
+	background: #ddd;
+	z-index: 3;
+	width: 150px;
+	height: 35px;
+	text-align: center;
+	font-size: 35px;
+	padding: 20px;
+}

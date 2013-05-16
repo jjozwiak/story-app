@@ -1,0 +1,27 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node', '/usr/local/bin/npm', 'install' ]
+2 info using npm@1.1.66
+3 info using node@v0.8.15
+4 verbose read json /Applications/MAMP/htdocs/abstral-app/package.json
+5 error install Couldn't read dependencies
+6 error Error: No 'name' field
+6 error     at validName (/usr/local/lib/node_modules/npm/node_modules/read-package-json/read-json.js:512:40)
+6 error     at final (/usr/local/lib/node_modules/npm/node_modules/read-package-json/read-json.js:295:27)
+6 error     at /usr/local/lib/node_modules/npm/node_modules/read-package-json/read-json.js:119:33
+6 error     at cb (/usr/local/lib/node_modules/npm/node_modules/slide/lib/async-map.js:48:11)
+6 error     at /usr/local/lib/node_modules/npm/node_modules/read-package-json/read-json.js:237:59
+6 error     at Glob.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/glob/glob.js:91:7)
+6 error     at Glob.EventEmitter.emit (events.js:96:17)
+6 error     at Glob._processEmitQueue (/usr/local/lib/node_modules/npm/node_modules/glob/glob.js:272:10)
+6 error     at Glob.emitMatch (/usr/local/lib/node_modules/npm/node_modules/glob/glob.js:257:8)
+6 error     at Glob._finish (/usr/local/lib/node_modules/npm/node_modules/glob/glob.js:219:8)
+7 error If you need help, you may report this log at:
+7 error     <http://github.com/isaacs/npm/issues>
+7 error or email it to:
+7 error     <npm-@googlegroups.com>
+8 error System Darwin 11.4.2
+9 error command "node" "/usr/local/bin/npm" "install"
+10 error cwd /Applications/MAMP/htdocs/abstral-app
+11 error node -v v0.8.15
+12 error npm -v 1.1.66
+13 verbose exit [ 1, true ]
