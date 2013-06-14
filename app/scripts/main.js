@@ -2,7 +2,7 @@
 var currentPage = 'page1';
 
 var swipeOrder = {
-    'page1' : {'prev' : 20, 'next' : 2,  'story' : 'none'},
+    'page1' : {'prev' : 20, 'next' : 2,  'story' : 0},
     'page2' : {'prev' : 1,  'next' : 3,  'story' : 0},
     'page3' : {'prev' : 2,  'next' : 4,	 'story' : 0},
     'page4' : {'prev' : 3,  'next' : 5,	 'story' : 0},
