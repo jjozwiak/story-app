@@ -35,6 +35,7 @@ var topNav = [
     {'navlinks':[{'link-text': 'Story 7 Page 1', 'href': '#page19'}, {'link-text': 'Story 7 Page 2', 'href': '#page20'}]}
 ];
 
+//Builds top dropdown navigation based on the story of the destination page
 var buildNav = function(story, dest){
 
     var source = $("#nav-template").html();
@@ -53,63 +54,95 @@ var buildNav = function(story, dest){
 
 };
 
+//displays and hides modal window for pi, isi, references, etc.
+var callModal = function(callModal){
+    if(callModal === true){
+        $('#overlay').addClass('active');
+        $('#modal').addClass('active');
+    }else{
+        $('#overlay').removeClass('active');
+        $('#modal').removeClass('active');
+        $('#modal-content').empty();
+    }
+};
+
+//utility function to find an object with a specific value in a JSON string
+//we'll use this to find references for a particular page when we click on the references button.
+function getObjects(obj, key, val) {
+    var objects = [];
+    for (var i in obj) {
+        if (!obj.hasOwnProperty(i)) continue;
+        if (typeof obj[i] == 'object') {
+            objects = objects.concat(getObjects(obj[i], key, val));
+        } else if (i == key && obj[key] == val) {
+            objects.push(obj);
+        }
+    }
+    return objects;
+};
+
 (function($) {
-	var methods = {
-	 	init : function(options) {
-		 	var settings = {
-		 		callback: function() {}
-		 	};
+    var methods = {
+        init : function(options) {
+            var settings = {
+                callback: function() {}
+            };
 
-		 	if ( options ) {
-		 		$.extend( settings, options );
-		 	}
+            if ( options ) {
+                $.extend( settings, options );
+            }
 
-			$(":jqmData(role='page')").each(function() {
+            $(":jqmData(role='page')").each(function() {
 
-				$(this).bind("swipeleft", function() {
+                //!TODO we should use this each loop to generate the swipe order objects and any other
+                //object having to do with pages. The entire application could in theory be built dynamically
+                //by traversing the DOM in index.html and setting certain configuration using data attributes.
+                //For instance, each page could probably have a next and prev value that determines swipe order.
 
-					//Set the nextPage variable
-					var nextPage = swipeOrder[currentPage]['next'];
+                $(this).bind("swipeleft", function() {
+
+                    //Set the nextPage variable
+                    var nextPage = swipeOrder[currentPage]['next'];
                     var story = swipeOrder['page' + nextPage]['story'];
                     var dest = 'page' + nextPage;
 
                     //Slide to next page
-					$.mobile.changePage("#page"+nextPage, { transition: "slide", reverse: false });
+                    $.mobile.changePage("#page"+nextPage, { transition: "slide", reverse: false });
 
                     //generate top nav links based on the story
                     buildNav(story, dest);
 
-				});
+                });
 
-				$(this).bind("swiperight", function() {
+                $(this).bind("swiperight", function() {
 
-					//Set the prevPage and story variable
-					var prevPage = swipeOrder[currentPage]['prev'];
+                    //Set the prevPage and story variable
+                    var prevPage = swipeOrder[currentPage]['prev'];
                     var story = swipeOrder['page' + prevPage]['story'];
                     var dest = 'page' + prevPage;
 
-					//Slide to previous page
-					$.mobile.changePage("#page"+prevPage, { transition: "slide", reverse: true });
+                    //Slide to previous page
+                    $.mobile.changePage("#page"+prevPage, { transition: "slide", reverse: true });
 
                     //generate top nav links based on the story
                     buildNav(story, dest);
 
-				});
-			});
-		}
-	}
+                });
+            });
+        }
+    }
 
-	$.fn.initApp = function(method) {
-		if ( methods[method] ) {
-			return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
-		}
-		else if ( typeof method === 'object' || ! method ) {
-			return methods.init.apply( this, arguments );
-		}
-		else {
-			$.error( 'Method ' + method + ' does not exist' );
-		}
-	}
+    $.fn.initApp = function(method) {
+        if ( methods[method] ) {
+            return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
+        }
+        else if ( typeof method === 'object' || ! method ) {
+            return methods.init.apply( this, arguments );
+        }
+        else {
+            $.error( 'Method ' + method + ' does not exist' );
+        }
+    }
 
 })(jQuery);
 
@@ -117,10 +150,21 @@ $(document).ready(function(){
 
     $().initApp();
 
+    buildNav(0,currentPage);
+
     //update currentPage variable when page changes
     $(this).bind("pagechange", function(){
-    	currentPage = $.mobile.activePage[0].id;
-    	currentGroup = swipeOrder[currentPage]['group'];
+        currentPage = $.mobile.activePage[0].id;
+        currentGroup = swipeOrder[currentPage]['group'];
+
+        //Trigger page 10 animation
+        if(currentPage == 'page10'){
+            setInterval( function(){
+                $('#page10 .tit-adequate').addClass('show');
+                $('#page10 .tit-adequate-step').addClass('show');
+                $('#page10 .button1').addClass('show');
+            }, 1000);
+        }
     });
 
     //top nav dropdown animation
@@ -134,19 +178,24 @@ $(document).ready(function(){
         target.toggleClass('show');
     });
 
-    //isi animation
-    $('#isi-button').on('click', function(){
-        var target = $(this).parent().parent();
-        target.toggleClass('show');
+    //warning animation
+    $('#warning-copy').on('click', function(){
+        var target = $(this).parent();
+        //target.toggleClass('show');
+        if(target.hasClass('show')){
+            target.removeClass('show');
+        }else{
+            target.addClass('show');
+        }
     });
 
-    $("#main-story-links-container a").on('click', function(e){
+    $("#main-story-links-container a").on('tap', function(e){
         e.preventDefault();
         var storyId = $(this).data('story');
         buildNav(storyId);
     });
 
-    $('#nav-links-container').on('click', 'a', function(e){
+    $('#nav-links-container').on('tap', 'a', function(e){
         e.preventDefault();
         $('#nav-dropdown').removeClass('show');
         $("#nav-links-container ul li a").removeClass('active');
@@ -163,6 +212,51 @@ $(document).ready(function(){
 
     });
 
+    var footerJSONData = (function () {
+        var json = null;
+        $.ajax({
+            'async': false,
+            'global': false,
+            'url': 'data/footerdata.json',
+            'dataType': "json",
+            'success': function (data) {
+                json = data;
+            }
+        });
+        return json;
+    })();
+
+    $('.footer-button').on('tap', function(){
+
+        var type = $(this).data('type');
+
+        switch(type){
+            case 'isi':
+                $('#modal-content').html(footerJSONData.isi);
+            break;
+            case 'pi':
+                $('#modal-content').html(footerJSONData.pi);
+            break;
+            case 'ref':
+                var references = getObjects(footerJSONData, 'page', currentPage);
+                if(references.length != 0){
+                    $('#modal-content').html(references[0].ref);
+                }else{
+                    $('#modal-content').html('This page does not have references. Please add them or disable the references button for this page');
+                }
+            break;
+        }
+        callModal(true);
+    });
+    $('.modal-close').on('tap', function(e){
+        e.preventDefault();
+        callModal(false);
+    });
+    // $('#overlay').on('tap', function(){
+    //     $(this).removeClass('active');
+    //     $('#modal-content').empty();
+    // });
+
     //timer function
     var sec = 0;
     function pad ( val ) { return val > 9 ? val : "0" + val; }
@@ -172,7 +266,3 @@ $(document).ready(function(){
     }, 1000);
 
 });
-
-
-
-
